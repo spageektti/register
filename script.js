@@ -22,6 +22,32 @@ async function getRandomUsername() {
     }
 }
 
+function sha256(str) {
+    return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
+}
+
+async function checkPasswordPwned(password) {
+    const hash = sha256(password);
+    const prefix = hash.slice(0, 5);
+    const suffix = hash.slice(5).toUpperCase();
+
+    try {
+        const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+        const data = await response.text();
+        const lines = data.split('\n');
+
+        for (const line of lines) {
+            const [hashSuffix, count] = line.split(':');
+            if (hashSuffix === suffix) {
+                return parseInt(count);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching pwned passwords:', error);
+    }
+    return 0;
+}
+
 async function check() {
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
@@ -42,11 +68,15 @@ async function check() {
     }
 
     // Password validation
-    if (password.includes('You')) {
+    if (password.toLowerCase().includes('you')) {
         passwordError.textContent = "Password is too weak.";
     }
-    else if (password.includes('Chuck') || password.includes('Norris')) {
+    else if (password.toLowerCase().includes('chuck') || password.toLowerCase().includes('norris')) {
         passwordError.textContent = "Password is too strong.";
+    } else if (password.toLowerCase().includes('password')) {
+        passwordError.textContent = "If your password is 'password', we need to have a serious talk.";
+    } else if (password.includes('zaq1@WSX')) {
+        passwordError.textContent = "Really? 'zaq1@WSX'? This password is like a school uniform - everyone's wearing it! Pick something unique.";
     }
     else if (password.length < 8) {
         passwordError.textContent = "Your password is too short, like you. At least 180cm... Uhh I mean at least 8 characters needed.";
@@ -58,7 +88,13 @@ async function check() {
         passwordError.textContent = `${await getRandomUsername()} already uses this password. Try something more creative.`;
     }
     else {
-        passwordError.textContent = "";
+        const pwnedCount = await checkPasswordPwned();
+
+        passwordError.textContent = `Your password has been seen ${pwnedCount} times before! Time to get more creative.`;
+
+
+        //    passwordError.textContent = "";
+
     }
 
     // Email validation
