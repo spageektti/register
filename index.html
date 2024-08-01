@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="fira.css">
+</head>
+
+<body>
+    <main>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <p id="username-error-message" class="error-message"></p>
+        <label for="password">Password</label>
+        <input type="text" id="password" name="password">
+        <p id="password" class="error-message"></p>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email">
+        <p id="email-error-message" class="error-message"></p>
+        <button onclick="Submit()">Register</button>
+        <p id="other-error-message" class="error-message"></p>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

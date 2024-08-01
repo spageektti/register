@@ -1,0 +1,68 @@
+html,
+body,
+main {
+    height: 100%;
+    background-color: black;
+    color: white;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+label,
+input,
+button,
+p {
+    text-align: center;
+    font-family: "Fira Mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+
+label {
+    font-size: 20px;
+}
+
+input,
+button {
+    color: white;
+    background-color: black;
+    border: solid 1px white;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+input {
+    width: 90vw;
+    max-width: 800px;
+}
+
+button {
+    width: 30vw;
+    max-width: 200px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: darkgray;
+}
+
+button:active {
+    background-color: gray;
+    transform: scale(0.98);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px white;
+}
+
+.error-message {
+    color: red;
+}
