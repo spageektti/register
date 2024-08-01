@@ -22,32 +22,6 @@ async function getRandomUsername() {
     }
 }
 
-function sha256(str) {
-    return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
-}
-
-async function checkPasswordPwned(password) {
-    const hash = sha256(password);
-    const prefix = hash.slice(0, 5);
-    const suffix = hash.slice(5).toUpperCase();
-
-    try {
-        const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
-        const data = await response.text();
-        const lines = data.split('\n');
-
-        for (const line of lines) {
-            const [hashSuffix, count] = line.split(':');
-            if (hashSuffix === suffix) {
-                return parseInt(count);
-            }
-        }
-    } catch (error) {
-        console.error('Error fetching pwned passwords:', error);
-    }
-    return 0;
-}
-
 async function check() {
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
@@ -88,13 +62,7 @@ async function check() {
         passwordError.textContent = `${await getRandomUsername()} already uses this password. Try something more creative.`;
     }
     else {
-        const pwnedCount = await checkPasswordPwned();
-
-        passwordError.textContent = `Your password has been seen ${pwnedCount} times before! Time to get more creative.`;
-
-
-        //    passwordError.textContent = "";
-
+        passwordError.textContent = "";
     }
 
     // Email validation
